@@ -1,44 +1,40 @@
 import React from "react";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Formik, Field, Form, ErrorMessage, withFormik } from "formik";
 import * as Yup from "yup";
+import { connect } from "react-redux";
+import { createProject } from "../../store/actions/projectActions";
 
 class CreateProject extends React.Component {
-  state = {
-    title: "",
-    content: ""
-  };
-
-  validationSchema = Yup.object().shape({
-    title: Yup.string().required("Project Title is required"),
-    content: Yup.string()
-      .min(20, "Project content must be above 20 characters")
-      .required("Project Content is required")
-  });
-
-  handleSubmit = async (
-    values,
-    { setSubmitting, setErrors, setStatus, resetForm }
-  ) => {
-    const { title, content } = values;
-    try {
-      //await auth.passwordUpdate(values.oldPassword, values.passwordOne)
-      await this.setState({ title, content });
-      resetForm();
-      setStatus({ success: true });
-    } catch (error) {
-      setStatus({ success: false });
-      setSubmitting(false);
-      setErrors({ submit: error.message });
-    }
-  };
   render() {
-    console.log("this.state", this.state);
+    const { createProject } = this.props;
+    const validationSchema = Yup.object().shape({
+      title: Yup.string().required("Project Title is required"),
+      content: Yup.string()
+        .min(20, "Project content must be above 20 characters")
+        .required("Project Content is required")
+    });
     return (
       <div className="container">
         <Formik
-          initialValues={this.state}
-          onSubmit={this.handleSubmit}
-          validationSchema={this.validationSchema}
+          initialValues={{
+            title: "",
+            content: ""
+          }}
+          onSubmit={(
+            values,
+            { setSubmitting, setErrors, setStatus, resetForm }
+          ) => {
+            try {
+              createProject(values);
+              resetForm();
+              setStatus({ success: true });
+            } catch (error) {
+              setStatus({ success: false });
+              setSubmitting(false);
+              setErrors({ submit: error.message });
+            }
+          }}
+          validationSchema={validationSchema}
           enableReinitialize
         >
           {({
@@ -91,4 +87,24 @@ class CreateProject extends React.Component {
     );
   }
 }
-export default CreateProject;
+
+const formikEnhancer = withFormik({
+  displayName: "CreateProject"
+})(CreateProject);
+
+const mapStateToProps = state => ({
+  //...
+});
+
+const mapDispatchToProps = dispatch => {
+  return {
+    createProject: values => {
+      dispatch(createProject(values));
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(formikEnhancer);
