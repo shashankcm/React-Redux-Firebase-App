@@ -64,7 +64,7 @@ class SignUp extends React.Component {
             handleSubmit,
             handleReset
           }) => (
-            <Form className="white">
+            <Form className="white form">
               <h5 className="grey-text text-darken-3">Create an Account</h5>
               <Field
                 type="text"

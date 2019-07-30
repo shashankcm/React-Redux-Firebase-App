@@ -54,7 +54,7 @@ class SignIn extends React.Component {
             handleSubmit,
             handleReset
           }) => (
-            <Form className="white">
+            <Form className="white form">
               <h5 className="grey-text text-darken-3">Sign In</h5>
               <Field
                 type="email"
