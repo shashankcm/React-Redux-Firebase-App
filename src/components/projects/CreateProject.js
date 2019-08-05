@@ -29,6 +29,7 @@ class CreateProject extends React.Component {
               resetForm();
               setStatus({ success: true });
             } catch (error) {
+              console.log(error);
               setStatus({ success: false });
               setSubmitting(false);
               setErrors({ submit: error.message });
