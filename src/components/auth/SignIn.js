@@ -1,46 +1,47 @@
 import React from "react";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Formik, Field, Form, ErrorMessage, withFormik } from "formik";
 import * as Yup from "yup";
+import { connect } from "react-redux";
+import { signIn } from "../../store/actions/authActions";
 
 class SignIn extends React.Component {
-  state = {
-    email: "",
-    password: ""
-  };
-
-  validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Invalid Email !!")
-      .required("Email is required"),
-    password: Yup.string()
-      .min(6, "Password must be above 6 characters")
-      .required("Password is required")
-  });
-
-  handleSubmit = async (
-    values,
-    { setSubmitting, setErrors, setStatus, resetForm }
-  ) => {
-    //console.log(values);
-    try {
-      //await auth.passwordUpdate(values.oldPassword, values.passwordOne)
-      await this.setState({ email: values.email, password: values.password });
-      resetForm();
-      setStatus({ success: true });
-    } catch (error) {
-      setStatus({ success: false });
-      setSubmitting(false);
-      setErrors({ submit: error.message });
-    }
-  };
   render() {
-    //console.log("this.state", this.state);
+    const { authError } = this.props;
+    console.log(authError, " in Component");
+    const { signIn } = this.props;
+    const validationSchema = Yup.object().shape({
+      email: Yup.string()
+        .email("Invalid Email !!")
+        .required("Email is required"),
+      password: Yup.string()
+        .min(6, "Password must be above 6 characters")
+        .required("Password is required")
+    });
     return (
       <div className="container">
         <Formik
-          initialValues={this.state}
-          onSubmit={this.handleSubmit}
-          validationSchema={this.validationSchema}
+          initialValues={{
+            email: "",
+            password: ""
+          }}
+          onSubmit={(
+            values,
+            { setSubmitting, setErrors, setStatus, resetForm }
+          ) => {
+            //console.log(values);
+            try {
+              //await auth.passwordUpdate(values.oldPassword, values.passwordOne)
+              signIn(values);
+              resetForm();
+              setStatus({ success: true });
+            } catch (error) {
+              console.log(error);
+              setStatus({ success: false });
+              setSubmitting(false);
+              setErrors({ submit: error.message });
+            }
+          }}
+          validationSchema={validationSchema}
           enableReinitialize
         >
           {({
@@ -84,6 +85,9 @@ class SignIn extends React.Component {
                 >
                   Login
                 </button>
+                <div className="red-text">
+                  {authError ? <p>{authError.message}</p> : null}
+                </div>
               </div>
             </Form>
           )}
@@ -92,4 +96,23 @@ class SignIn extends React.Component {
     );
   }
 }
-export default SignIn;
+const formikEnhancer = withFormik({
+  displayName: "SignIn"
+})(SignIn);
+
+const mapStateToProps = state => ({
+  authError: state.auth.authError
+});
+
+const mapDispatchToProps = dispatch => {
+  return {
+    signIn: values => {
+      dispatch(signIn(values));
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(formikEnhancer);
