@@ -28,6 +28,7 @@ class CreateProject extends React.Component {
               createProject(values);
               resetForm();
               setStatus({ success: true });
+              this.props.history.push("/");
             } catch (error) {
               console.log(error);
               setStatus({ success: false });

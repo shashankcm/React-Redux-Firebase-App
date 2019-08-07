@@ -25,7 +25,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 // Create config for rrfProps object. We need this to pass it in the ReactReduxFirebaseProvider component
 const rrfConfig = {
   useFirestoreForProfile: true, // Firestore for Profile instead of Realtime DB
-  userProfile: "users",
+  userProfile: "users", //here users is collection in the firestore database
   attachAuthIsReady: true
 };
 
