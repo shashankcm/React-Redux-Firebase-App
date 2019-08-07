@@ -60,7 +60,10 @@ class CreateProject extends React.Component {
                 value={values.title}
                 className="input-field"
               />
-              <ErrorMessage name="title" />
+              <ErrorMessage
+                name="title"
+                render={msg => <div className="red-text">{msg}</div>}
+              />
               <Field
                 component="textarea"
                 id="content"
@@ -71,7 +74,10 @@ class CreateProject extends React.Component {
                 className="materialize-textarea"
                 rows="20"
               />
-              <ErrorMessage name="content" />
+              <ErrorMessage
+                name="content"
+                render={msg => <div className="red-text">{msg}</div>}
+              />
               <div className="input-field">
                 <button
                   type="submit"

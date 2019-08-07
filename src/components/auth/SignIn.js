@@ -7,7 +7,6 @@ import { signIn } from "../../store/actions/authActions";
 class SignIn extends React.Component {
   render() {
     const { authError } = this.props;
-    console.log(authError, " in Component");
     const { signIn } = this.props;
     const validationSchema = Yup.object().shape({
       email: Yup.string()
@@ -66,7 +65,10 @@ class SignIn extends React.Component {
                 value={values.email}
                 className="input-field"
               />
-              <ErrorMessage name="email" />
+              <ErrorMessage
+                name="email"
+                render={msg => <div className="red-text">{msg}</div>}
+              />
               <Field
                 type="password"
                 id="password"
@@ -76,7 +78,10 @@ class SignIn extends React.Component {
                 value={values.password}
                 className="input-field"
               />
-              <ErrorMessage name="password" />
+              <ErrorMessage
+                name="password"
+                render={msg => <div className="red-text">{msg}</div>}
+              />
               <div className="input-field">
                 <button
                   type="submit"
