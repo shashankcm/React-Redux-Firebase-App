@@ -2,7 +2,6 @@ import React from "react";
 import moment from "moment";
 
 const Notifications = ({ notifications }) => {
-  console.log(notifications, "In Notifications");
   return (
     <div className="section">
       <div className="card z-depth-0">
