@@ -8,7 +8,7 @@ import ProjectList from "../projects/ProjectList";
 class Dashboard extends Component {
   render() {
     //console.log(this.props);
-    const { projects } = this.props;
+    const { projects, notifications } = this.props;
     return (
       <div className="darshboard container">
         <div className="row">
@@ -16,7 +16,7 @@ class Dashboard extends Component {
             <ProjectList projects={projects} />
           </div>
           <div className="col s12 m5 offset-m">
-            <Notifications />
+            <Notifications notifications={notifications} />
           </div>
         </div>
       </div>
@@ -27,11 +27,15 @@ class Dashboard extends Component {
 const mapStateToProps = state => {
   //console.log(state);
   return {
-    projects: state.firestore.ordered.projects
+    projects: state.firestore.ordered.projects,
+    notifications: state.firestore.ordered.notifications
   };
 };
 
 export default compose(
   connect(mapStateToProps),
-  firestoreConnect([{ collection: "projects" }])
+  firestoreConnect([
+    { collection: "projects" },
+    { collection: "notifications", limit: 3 }
+  ])
 )(Dashboard);
